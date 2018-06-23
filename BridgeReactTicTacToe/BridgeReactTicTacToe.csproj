@@ -55,10 +55,12 @@
     <None Include="bridge.json" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="bin\Debug\bridge\demo.html" />
-    <Content Include="bin\Debug\bridge\styles.css" />
+    <Folder Include="bin\Debug\bridge\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="demo.html" />
+    <Content Include="styles.css" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Bridge.React.4.1.0\analyzers\dotnet\cs\Bridge.React.Analyser.dll" />

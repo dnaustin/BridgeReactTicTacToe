@@ -3,8 +3,7 @@
 
 {
   // The folder to output JavaScript (.js) files.
-  "output": "$(OutDir)/bridge/",
-
+  "output": "Bridge/output/",
   "combineScripts": true,
 
   // Set to "Minified" to generate .min.js files.
@@ -40,7 +39,7 @@
   // If true, all files within the "output"
   // folder location will be deleted on Build.
   //    ** USE WITH CAUTION **
-  "cleanOutputFolderBeforeBuild": false,
+  "cleanOutputFolderBeforeBuild": true,
 
   // Set to true to enable bridge.report.log generation.
   // Default is false.
@@ -65,7 +64,7 @@
   // and add the file to the output directory.
   // Default is false.
   "html": {
-    "disabled": false
+    "disabled": true
   },
 
   // Add compilation logging to your Project.
