@@ -15,6 +15,7 @@ namespace BridgeReactTicTacToe.Components
             return new State
             {
                 history = history,
+                stepNumber = 0,
                 xIsNext = true
             };
         }
@@ -22,7 +23,7 @@ namespace BridgeReactTicTacToe.Components
         public override ReactElement Render()
         {
             var history = this.state.history;
-            var current = history[history.Length - 1];
+            var current = history[this.state.stepNumber];
 
             string winner = this.calculateWinner(current);
 
@@ -37,13 +38,31 @@ namespace BridgeReactTicTacToe.Components
                 status = string.Format("Next player: {0}", currentPlayer());
             }
 
+            var moves = history.Select((step, move) =>
+            {
+                var desc = "Go to move #" + move;
+                return DOM.Li(new LIAttributes { Key = move },
+                    DOM.Button(new ButtonAttributes { OnClick = (e) => { this.jumpTo(move); } }, desc)
+                    );
+            });
+
             return DOM.Div(new Attributes { ClassName = "game" },
                 DOM.Div(new Attributes { ClassName = "game-board"}, 
                     new Board(new Board.Props { squares = current, onClick = (i) => this.handleClick(i)})),
                 DOM.Div(new Attributes { ClassName = "game-info"},
                     DOM.Div(new Attributes { }, status),
-                    DOM.OL(new OListAttributes { }))
+                    DOM.OL(new OListAttributes { }, moves))
                 );
+        }
+
+        private void jumpTo(int move)
+        {
+            this.SetState(new State
+            {
+                history = this.state.history,
+                stepNumber = move,
+                xIsNext = (move % 2) == 0
+            });
         }
 
         private string calculateWinner(string[] squares)
@@ -82,6 +101,8 @@ namespace BridgeReactTicTacToe.Components
         private void handleClick(int i)
         {
             var newHistory = (string[][])this.state.history.Clone();
+            newHistory = (string[][])newHistory.Slice(0, this.state.stepNumber + 1);
+
             var current = newHistory[newHistory.Length - 1];
             var newSquares = (string[])current.Clone();
 
@@ -93,7 +114,14 @@ namespace BridgeReactTicTacToe.Components
             newSquares[i] = currentPlayer();
             newHistory.Push(newSquares);
 
-            this.SetState(new State { history = newHistory, xIsNext = !this.state.xIsNext });
+            var stepNumber = newHistory.Length - 1;
+
+            this.SetState(new State
+            {
+                history = newHistory,
+                stepNumber = stepNumber,
+                xIsNext = !this.state.xIsNext
+            });
         }
 
         public class Props
@@ -103,6 +131,7 @@ namespace BridgeReactTicTacToe.Components
         public class State
         {
             public string[][] history;
+            public int stepNumber;
             public bool xIsNext;
         }
     }
